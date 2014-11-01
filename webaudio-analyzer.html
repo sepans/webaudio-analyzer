@@ -39,22 +39,30 @@ HTML Audio player with graphic equalizer
     Polymer('webaudio-analyzer', {
       /**
        * color of equalizer bar in HTML color
+       * @property color
        * @type {String} 
+       * @default #00CCFF
        */
       color: '#00CCFF',
       /**
        * Width of equalizer
+       * @property width
        * @type {Number}
+       * @default 300
        */
       width: 300,
       /**
        * Height of equalizer
+       * @property height
        * @type {Number}
+       * @default 200
        */
       height: 200,
       /**
        * show HTML5 audio controls
+       * @property showControls
        * @type {Boolean}
+       * @default true
        */
       showControls: true,
       ready: function() {
