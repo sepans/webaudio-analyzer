@@ -1,0 +1,18 @@
+{
+  "name": "webaudio-analyzer",
+  "version": "0.0.0",
+  "keywords": [
+    "seed",
+    "polymer",
+    "web-components"
+  ],
+  "main": "webaudio-analyzer.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.5"
+  },
+  "resolutions": {
+    "platform": "^0.4.0",
+    "core-component-page": "^0.4.0",
+    "polymer": "^0.4.0"
+  }
+}

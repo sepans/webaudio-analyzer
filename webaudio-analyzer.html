@@ -1,0 +1,129 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+HTML Audio player with graphic equalizer
+
+##### Example
+
+    <webaudio-analyzer src="audio.ogg"></webaudio-analyzer>
+
+@element webaudio-analyzer
+@blurb HTML Audio player with graphic equalizer using Web Audio API
+@status alpha
+@homepage http://sepans.github.io/webaudio-analyzer
+-->
+<polymer-element name="webaudio-analyzer" attributes="width height color src showControls play">
+
+  <template>
+
+    <style>
+      #audio {
+        display: block;
+      }
+    </style>
+    <template if="{{src}}">
+      <audio id="audio" width="{{width}}" controls="{{showControls}}">
+        <source src="{{src}}" type="audio/ogg">
+      </audio>    
+    </template>
+
+    <canvas id="canvas" width="{{width}}" height="{{height}}" >
+    </canvas>
+
+
+
+  </template>
+
+  <script>
+
+    Polymer('webaudio-analyzer', {
+      /**
+       * color of equalizer bar in HTML color
+       * @type {String} 
+       */
+      color: '#00CCFF',
+      /**
+       * Width of equalizer
+       * @type {Number}
+       */
+      width: 300,
+      /**
+       * Height of equalizer
+       * @type {Number}
+       */
+      height: 200,
+      /**
+       * show HTML5 audio controls
+       * @type {Boolean}
+       */
+      showControls: true,
+      ready: function() {
+        var self = this;
+        self._canvasContext = self.$.canvas.getContext('2d');
+        self._audioContext = new webkitAudioContext();
+
+        self._source = self._audioContext.createMediaElementSource(self.$.audio);
+        self._analyser = self._audioContext.createAnalyser(); 
+
+
+        self._source.connect(self._analyser);
+        self._analyser.connect(self._audioContext.destination);
+
+        if(!self.showControls) {
+          self.$.audio.removeAttribute('controls');
+        }
+     
+
+        if(self.src) {
+          this._visualize();
+        }
+
+
+      },
+      /**
+       * Play audio
+       */
+      play: function() {
+        self.$.audio.play();
+      },
+      /**
+       * Pause audio
+       * @return {[type]} [description]
+       */
+      pause: function() {
+        self.$.audio.pause();
+      },
+
+      _visualize: function() {
+        var self = this;
+        window.webkitRequestAnimationFrame(self._visualize.bind(self));
+        
+        // this actually works but definitly not smooth
+        //setInterval(self._visualize.bind(self),50);
+        
+        self._fbc_array = new Uint8Array(self._analyser.frequencyBinCount);
+        self._analyser.getByteFrequencyData(self._fbc_array);
+        self._canvasContext.clearRect(0, 0, self.$.canvas.width, self.$.canvas.height); // Clear the canvas
+        self._canvasContext.fillStyle = self.color; // Color of the bars
+        bars = 100;
+
+        var sum = 0;
+
+        for (var i = 0; i < bars; i++) {
+          bar_x = i * 3;
+          bar_width = 2;
+          bar_height = -(self._fbc_array[i] / 2);
+          //fillRect( x, y, width, height ) // Explanation of the parameters below
+          self._canvasContext.fillRect(bar_x, self.$.canvas.height, bar_width, bar_height);
+
+          sum+= self._fbc_array[i];
+        }
+
+      }
+      
+
+    });
+
+  </script>
+
+</polymer-element>
