@@ -1,16 +1,20 @@
 {
   "name": "webaudio-analyzer",
-  "version": "0.0.0",
+  "description": "HTML5 audio player with audio spectrum",
+  "version": "0.0.1",
+  "license": "MIT",  
   "keywords": [
-    "seed",
     "polymer",
-    "web-components"
+    "web-components",
+    "audio",
+    "html5 audio",
+    "analyzer",
+    "audio spectrum"
   ],
   "main": "webaudio-analyzer.html",
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.1",
     "paper-slider": "Polymer/paper-slider#~0.5.1",
-    "paper-icon-button": "Polymer/paper-icon-button#~0.5.1",
-    "core-icon-button": "Polymer/core-icon-button#~0.5.1"
+    "paper-icon-button": "Polymer/paper-icon-button#~0.5.1"
   }
 }
