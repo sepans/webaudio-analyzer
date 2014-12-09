@@ -8,11 +8,9 @@
   ],
   "main": "webaudio-analyzer.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.3.5"
-  },
-  "resolutions": {
-    "platform": "^0.4.0",
-    "core-component-page": "^0.4.0",
-    "polymer": "^0.4.0"
+    "polymer": "Polymer/polymer#~0.5.1",
+    "paper-slider": "Polymer/paper-slider#~0.5.1",
+    "paper-icon-button": "Polymer/paper-icon-button#~0.5.1",
+    "core-icon-button": "Polymer/core-icon-button#~0.5.1"
   }
 }
