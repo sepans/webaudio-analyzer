@@ -32,6 +32,10 @@ HTML Audio player with graphic equalizer
         background-color: #555;
       }
 
+      paper-slider::shadow #sliderKnobInner::before {
+        background-color: #555;
+      }      
+
       canvas {
         display: block;
       }
@@ -120,14 +124,12 @@ HTML Audio player with graphic equalizer
         }
         self.$.audio.addEventListener('loadedmetadata', function() {
           self._duration = self.$.audio.duration;
-          console.log(self._duration);
         });
 
         self.$.slider.addEventListener('change', function(e) {
             self.pause();
             self.$.audio.currentTime = e.path[0].immediateValue;
             self.play();
-            console.log(self.$.audio.currentTime);
         });
 
 
@@ -185,8 +187,6 @@ HTML Audio player with graphic equalizer
             bar_x = i * 3;
             bar_width = 2;
             bar_height = -(_fbc_array[i] * (self.height -20) / 255 );
-            //console.log(bar_height);
-            //fillRect( x, y, width, height ) // Explanation of the parameters below
             self._canvasContext.fillRect(bar_x, self.height -20 , bar_width, bar_height);
 
             sum+= _fbc_array[i];
