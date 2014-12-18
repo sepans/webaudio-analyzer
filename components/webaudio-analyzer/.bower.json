@@ -1,0 +1,30 @@
+{
+  "name": "webaudio-analyzer",
+  "description": "HTML5 audio player with audio spectrum",
+  "license": "MIT",
+  "keywords": [
+    "polymer",
+    "web-components",
+    "audio",
+    "html5 audio",
+    "analyzer",
+    "audio spectrum"
+  ],
+  "main": "webaudio-analyzer.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.1",
+    "paper-slider": "Polymer/paper-slider#~0.5.1",
+    "paper-icon-button": "Polymer/paper-icon-button#~0.5.1"
+  },
+  "homepage": "https://github.com/sepans/webaudio-analyzer",
+  "_release": "f0ea428d5a",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "f0ea428d5ab9459e403d2d47d7cabcb045bdf3a0"
+  },
+  "_source": "git://github.com/sepans/webaudio-analyzer.git",
+  "_target": "master",
+  "_originalSource": "sepans/webaudio-analyzer",
+  "_direct": true
+}

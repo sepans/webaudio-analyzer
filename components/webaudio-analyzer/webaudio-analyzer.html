@@ -1,0 +1,206 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-slider/paper-slider.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+
+<!--
+HTML Audio player with graphic equalizer
+
+##### Example
+
+    <webaudio-analyzer src="audio.ogg"></webaudio-analyzer>
+
+@element webaudio-analyzer
+@blurb HTML Audio player with graphic equalizer using Web Audio API
+@status alpha
+@homepage http://sepans.github.io/webaudio-analyzer
+-->
+<polymer-element name="webaudio-analyzer" attributes="width height color src showControls play">
+
+  <template>
+
+    <style>
+      #audio {
+        display: block;
+      }
+
+      paper-slider::shadow #sliderBar::shadow #activeProgress {
+        background-color: #555;
+      }
+      
+
+      paper-slider::shadow #sliderKnobInner {
+        background-color: #555;
+      }
+
+      paper-slider::shadow #sliderKnobInner::before {
+        background-color: #555;
+      }      
+
+      canvas {
+        display: block;
+      }
+
+    </style>
+    <template if="{{src}}">
+      <audio id="audio" width="{{width}}" controls="{{showControls}}">
+        <source src="{{src}}" type="audio/ogg">
+      </audio>  
+      <paper-icon-button on-click="{{_togglePlay}}" id="play" src="icons/play.png"></paper-icon-button>
+      <paper-slider pin="true" id="slider" min="0" max="{{_duration}}" value="{{_progress}}" style="width: {{ width - 20}}px"></core-slider>
+
+    </template>
+
+      <canvas id="canvas" width="{{width}}px" height="{{height-20}}px" ></canvas>
+
+
+
+  </template>
+
+  <script>
+
+    Polymer('webaudio-analyzer', {
+      /**
+       * color of equalizer bar in HTML color
+       * @property color
+       * @type {String} 
+       * @default #00CCFF
+       */
+      color: '#555',
+      /**
+       * Width of equalizer
+       * @property width
+       * @type {Number}
+       * @default 300
+       */
+      width: 300,
+      /**
+       * Height of equalizer
+       * @property height
+       * @type {Number}
+       * @default 200
+       */
+      height: 100,
+      /**
+       * show HTML5 audio controls
+       * @property showControls
+       * @type {Boolean}
+       * @default true
+       */
+      showControls: false,
+      /**
+       * if audio is playing
+       * @type {Boolean}
+       */
+      playing: false,
+      /**
+       * length of audio track
+       * @type {Number}
+       */
+      _duration: 0,
+      /**
+       * audio progress
+       * @type {Number}
+       */
+      _progress: 0,
+      ready: function() {
+        var self = this;
+        self._canvasContext = self.$.canvas.getContext('2d');
+        self._audioContext = new webkitAudioContext();
+
+        self._source = self._audioContext.createMediaElementSource(self.$.audio);
+        self._analyser = self._audioContext.createAnalyser(); 
+
+
+        self._source.connect(self._analyser);
+        self._analyser.connect(self._audioContext.destination);
+
+        if(!self.showControls) {
+          self.$.audio.removeAttribute('controls');
+        }
+     
+
+        if(self.src) {
+          this._visualize();
+        }
+        self.$.audio.addEventListener('loadedmetadata', function() {
+          self._duration = self.$.audio.duration;
+        });
+
+        self.$.slider.addEventListener('change', function(e) {
+            self.pause();
+            self.$.audio.currentTime = e.path[0].immediateValue;
+            self.play();
+        });
+
+
+      },
+      /**
+       * Play audio
+       */
+      play: function() {
+        this.$.audio.play();
+      },
+      /**
+       * Pause audio
+       * @return {[type]} [description]
+       */
+      pause: function() {
+        this.$.audio.pause();
+      },
+
+      _togglePlay: function() {
+        
+        if(!this.playing) {
+          this.$.play.src = "icons/pause.png";
+          this.play();
+
+        }
+        else {
+          this.$.play.src = "icons/play.png";
+          this.pause();
+        }
+        this.playing = !this.playing;
+
+      },
+
+      _visualize: function() {
+        var self = this;
+        window.webkitRequestAnimationFrame(self._visualize.bind(self));
+
+        if(self.playing) {
+
+          self._progress = self.$.audio.currentTime;
+          
+          // this actually works but definitly not smooth
+          //setInterval(self._visualize.bind(self),50);
+          
+          var _fbc_array = new Uint8Array(self._analyser.frequencyBinCount);
+          self._analyser.getByteFrequencyData(_fbc_array);
+          self._canvasContext.clearRect(0, 0, self.width, self.height - 20); // Clear the canvas
+          self._canvasContext.fillStyle = self.color; // Color of the bars
+          bars = 100;
+
+          var sum = 0;
+          var max = 0;
+
+          for (var i = 0; i < bars; i++) {
+            bar_x = i * 3;
+            bar_width = 2;
+            bar_height = -(_fbc_array[i] * (self.height -20) / 255 );
+            self._canvasContext.fillRect(bar_x, self.height -20 , bar_width, bar_height);
+
+            sum+= _fbc_array[i];
+
+            max = Math.min(max,bar_height);
+          }
+          console.log(max);
+
+        }
+      }
+      
+
+    });
+
+  </script>
+
+</polymer-element>
