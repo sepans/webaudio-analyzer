@@ -105,7 +105,7 @@ HTML Audio player with graphic equalizer
       ready: function() {
         var self = this;
         self._canvasContext = self.$.canvas.getContext('2d');
-        self._audioContext = new webkitAudioContext();
+        self._audioContext = new (AudioContext || webkitAudioContext)();
 
         self._source = self._audioContext.createMediaElementSource(self.$.audio);
         self._analyser = self._audioContext.createAnalyser(); 
